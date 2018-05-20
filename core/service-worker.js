@@ -7,7 +7,7 @@
 /* globals WorkboxSW */
 
 const workboxSW = new WorkboxSW({
-    cacheId: 'lavas-cache',
+    cacheId: 'imagewall',
     ignoreUrlParametersMatching: [/^utm_/],
     skipWaiting: true,
     clientsClaim: true
