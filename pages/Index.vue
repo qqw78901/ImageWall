@@ -4,10 +4,7 @@
             <!-- <uploadFiles/> -->
             <v-subheader class="">2018-03-01</v-subheader>
             <ImgWall/>
-                <v-subheader >2018-03-01</v-subheader>
-            <ImgWall/>
-                <v-subheader >2018-03-01</v-subheader>
-            <ImgWall/>
+              
         </div>
     </div>
 </template>

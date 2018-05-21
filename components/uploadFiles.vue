@@ -11,6 +11,19 @@
       <v-icon left dark>add_a_photo</v-icon>上传图片
       <input type="file" name="file" id="file" accept="image/png,image/jpeg,image/webp" multiple="multiple" class="fileInput" @change="changInput">
     </v-btn>
+
+    <v-dialog v-model="loading" persistent max-width="290">
+      <v-card>
+        <v-card-text>
+          <v-progress-circular :size="100" :width="4" indeterminate :value="progress.completed/progress.total" color="green" class="my-4">
+            {{progress.completed}}/{{progress.total}}
+          </v-progress-circular>
+          <p class="text-xs-center">上传中</p>
+        </v-card-text>
+
+      </v-card>
+
+    </v-dialog>
   </div>
 
 </template>
@@ -20,16 +33,22 @@ export default {
   name: "uplaodFiles",
   data() {
     return {
+      loading: false,
+      progress: {
+        completed: 0,
+        total: 0
+      },
       headers: [
         {
-          text: "imgUrl",
+          text: "图片预览",
           align: "center",
           sortable: false,
           value: "imgUrl"
         },
         {
-          text: "文件名",
+          text: "文件路径",
           value: "name",
+          sortable: false,
           align: "left"
         }
         // { text: "拍摄时间", value: "picDt" }
@@ -37,23 +56,42 @@ export default {
       fileItems: []
     };
   },
+  mounted() {},
   methods: {
     changInput(e) {
       console.log(e.target.files);
       console.log(e.target.files.length);
+      this.openLoading(e.target.files.length);
       for (let i = 0; i < e.target.files.length; i++) {
-        this.upload(e.target.files[i]);
+        this.upload(e.target.files[i], i, e.target.files.length);
       }
     },
-    upload(file) {
+    openLoading(total) {
+      this.progress.completed=0;
+      this.loading = true;
+      this.progress.total = total;
+    },
+    closeLoading() {
+      this.loading = false;
+    },
+    async upload(file, i, length) {
       let self = this;
       co(function*() {
         var result = yield self.$client.put(`test/${file.name}`, file);
+        self.progress.completed += 1;
+        if (self.progress.completed >= length) {
+          self.closeLoading();
+        }
         self.addItem(result);
         console.log(result);
       }).catch(function(err) {
         console.log(err);
       });
+      // this.$client.multipartUpload(`test/${file.name}`, file).then(resp=>{
+      //   console.log(resp);
+      //   this.openLoading(i+1,length);
+      // });
+
       //     co(async ()=> {
       //     var result = await client.multipartUpload('object-key', 'local-file', {
       //         progress: function (p) {

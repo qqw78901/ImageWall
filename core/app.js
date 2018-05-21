@@ -10,10 +10,15 @@ import {createRouter} from '@/.lavas/router';
 import {createStore} from '@/.lavas/store';
 import AppComponent from './App.vue';
 import Vuetify from 'vuetify';
-
 Vue.use(Meta);
 
 Vue.use(Vuetify);
+
+
+import VuePreview from 'vue-preview'
+
+// defalut install
+Vue.use(VuePreview)
 
 const OSS = require("ali-oss");
 const client = new OSS({
