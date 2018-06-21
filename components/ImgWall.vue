@@ -1,9 +1,9 @@
 <template>
   <v-container v-bind="{ [`grid-list-xs`]: true }" fluid>
     <v-layout row wrap>
-      <v-flex v-for="(n,index) in imgList" :key="index" xs4 sm6>
+      <v-flex v-for="(n,index) in itemData" :key="index" xs4 sm6>
         <v-card flat tile class="">
-          <v-card-media :src="n.url" height="100px" @click="showImgView(imgList,index)">
+          <v-card-media :src="n.url" height="100px" @click="showSingleImgView(itemData,index)">
           </v-card-media>
         </v-card>
       </v-flex>
@@ -23,6 +23,9 @@ function getRealImg(filePath) {
 }
 export default {
   name: "ImgWall",
+  props: {
+    itemData: Array
+  },
   data() {
     return {
       imgList: []
@@ -43,7 +46,7 @@ export default {
     }
   },
   created() {
-    this.listDir("test/");
+    // this.listDir("test/");
   },
   methods: {
     handleClose() {
@@ -70,6 +73,23 @@ export default {
         });
         self.imgList = imgArr;
       });
+    },
+    showSingleImgView(imagelist, current){
+      let list = [imagelist[current]];
+       SingleImgView = new ImageView({
+        imagelist: list.map(item => item.hight),
+        current:0,
+        disableDoubleTap: false,
+        close: e => {
+          if (e.target.className === "imagelist-item") {
+            let imgObj = document.getElementById("imageview");
+            if (imgObj !== null) {
+              imgObj.parentNode.removeChild(imgObj);
+            }
+          }
+        }
+      });
+      SingleImgView.show();
     },
     showImgView(imagelist, current) {
       SingleImgView = new ImageView({

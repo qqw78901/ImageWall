@@ -7,7 +7,7 @@
       </template>
     </v-data-table>
 
-    <v-btn class="white--text fileInputBtn" color="primary">
+    <v-btn class="white--text fileInputBtn" color="success">
       <v-icon left dark>add_a_photo</v-icon>上传图片
       <input type="file" name="file" id="file" accept="image/png,image/jpeg,image/webp" multiple="multiple" class="fileInput" @change="changInput">
     </v-btn>
@@ -53,10 +53,18 @@ export default {
         }
         // { text: "拍摄时间", value: "picDt" }
       ],
-      fileItems: []
+      fileItems: [],
+      folder:''
     };
   },
-  mounted() {},
+  mounted() {
+    const {g} = this.$route.query;
+    let folder =  '2018052501';
+    if(g){
+      folder = g;
+    }
+    this.folder = folder;
+  },
   methods: {
     changInput(e) {
       console.log(e.target.files);
@@ -74,10 +82,10 @@ export default {
     closeLoading() {
       this.loading = false;
     },
-    async upload(file, i, length) {
+     upload(file, i, length) {
       let self = this;
-      co(function*() {
-        var result = yield self.$client.put(`test/${file.name}`, file);
+       co(function*() {
+        var result = yield self.$client.put(`${this.folder}/${file.name}`, file);
         self.progress.completed += 1;
         if (self.progress.completed >= length) {
           self.closeLoading();

@@ -23,10 +23,8 @@ Vue.use(VuePreview)
 const OSS = require("ali-oss");
 const client = new OSS({
   region: "oss-cn-qingdao",
-//   accessKeyId: "LTAITRn02JuELbOV",
-  accessKeyId: "LTAI002n4stCzQMS",
-  accessKeySecret: "UUJTdqn8FItT9caqqjkVEVgPAZ2o2L",
-//   accessKeySecret: "1jA02SbMLJFJmnncCJaYri6AeHe1tY",
+  accessKeyId: "",
+  accessKeySecret: "",
   bucket: "gdutzuo1"
 });
 Vue.prototype.$client = client;
